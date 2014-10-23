@@ -5,29 +5,31 @@ class db
 
     // 保存类实例在此属性中
     private static $instance;
-    private static $dbh;
+    public $dbh;
     // 构造方法声明为private，防止直接创建对象
-    private function __construct( & $DBname, & $host, & $user, & $password, & $DBtype)
+    private function __construct()
     {
-        if(!isset($DBtype)){
+    	 /*
+    	 if(!isset($DBtype)){
             $DBtype = 'mysql';
         }
-        $user     = $user ;
-        $password = $password ;
-
+       
         try{
-            $this->$dbh = mysql_connect($host,$user,$password);
+            self::$dbh = mysql_connect(C('server'),C('user'),C('passwd'));
+            if(!mysql_select_db(C('DBNAME'),self::$dbh)){
+		echo '选择数据库错误!';
+            }
         } catch( PDOException $e ){
             echo  'Connection failed: '  .  $e -> getMessage ();
-        }
+        }*/
 
     }
     // singleton 方法
-    public static function creat( & $DBname, & $host, & $user, & $password, & $DBtype)
+    public static function creat()
     {
         if(!isset(self::$instance)){
             $c = __CLASS__;
-            self::$instance = new $c($DBname,$host,$user,$password,$DBtype);
+            self::$instance = new $c();
         }
         return self::$instance;
     }
@@ -40,14 +42,13 @@ class db
 
     public function __call($name, $arguments)
     {
-        //var_dump($arguments);
+       
         return '';
     }
 
     public function query( & $sql)
     {
-
-        echo($sql);
+    	return $sql;
     }
 
 

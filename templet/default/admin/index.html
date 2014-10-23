@@ -1,15 +1,26 @@
 
-load(public./head.html)
+@load(admin./head.html)
 
 <body>
 
-    <form action="index.php?method=login" method="POST">
-        <input type="hidden" name="type"  value="1"/>
-        First name: <input type="text" name="fname" />
-        Last name: <input type="text" name="lname" />
-        <input type="submit" value="Submit" />
-    </form>
+
+
+<div class="container">
+
+
+<div class="row">
+	<div class="col-md-2">
+		@load(admin./left.html)
+	</div>
+	<div class="col-md-10">
+		@load(admin./right.html)
+	</div>
+</div>
+
+
+</div>
+
 
 </body>
 
-load(public./fundus.html)
+@load(public./fundus.html)

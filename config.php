@@ -5,26 +5,14 @@
 */
 
 define('ROOT',strtr(dirname(__FILE__),'\\','/'). './');
-//define('ROOT',str_replace('\\','/',dirname(__FILE__)). './');
 
 /**
 * 加载自动加载程序
 */
-/*
-if (!extension_loaded('shmop')) {
-if (strtoupper(substr(PHP_OS, 3)) == "WIN") {
-//Windows平台下
-dl('php_shmop.dll');
-}
-else {
-//Linux平台下
-dl('shmop.so');
-}
-}
-*/
 include(ROOT . "include./atuoload.php");
+
 /**
-* 声明一个配置程序  只能使用 crtat 生成本例
+* 声明一个配置程序 
 */
 
 
@@ -32,6 +20,10 @@ function C($name)
 {
     $config['templet'] = 'default';
     $config['server'] = '127.0.0.1';
+    $config['user'] = 'root';
+    $config['passwd'] = 'root';
+    $config['DBNAME'] = 'edu_Default';
+    
     return $config[$name];
 }
 
@@ -48,7 +40,8 @@ function G($name)
         return $arr;
     }
     if ($name == 'pagelist') {
-        $arr = array('a1','a2','a3','a5');
+    	$sql = 'sql';
+        $arr = array(db::creat()->query($sql),'a2','a3','a5');
         return $arr;
     }
     if ($name == 'newstype') {

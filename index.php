@@ -8,30 +8,22 @@ include("config.php");
 *
 */
 
-/**
-*
-* @var 如果没有设置类型则直接默认
-*
-*/
-
 if(count($_REQUEST) >= 1){
     if($_REQUEST[key($_REQUEST)] == ''){
-        $parameter = explode('/',ltrim(key($_REQUEST),'/'));
-        if(count($parameter) >= 2){
-            if(count($parameter) >= 1){
-                if($parameter[0] != ''){
-                    $_REQUEST['model'] = $parameter[0];
-                }
-            }
-            if(count($parameter) >= 2){
-                if($parameter[1] != ''){
-                    $_REQUEST['page'] = $parameter[1];
-                }
+        $parameter = explode('/',ltrim(key($_REQUEST),'\/'));
+        if(count($parameter) >= 1){
+
+            if($parameter[0] != ''){
+                $_REQUEST['model'] = $parameter[0];
             }
         }
+        if(count($parameter) >= 2){
+            if($parameter[1] != ''){
+                $_REQUEST['page'] = $parameter[1];
+            }
+        }
+
     }
-
-
 }
 
 
@@ -65,6 +57,11 @@ function ob_gzip($content) // $content 就是要压缩的页面内容，或者�
     return $content; //返回压缩的内容，或者说把压缩好的饼干送回工作台。
 }
 
+/**
+*
+* @var 如果没有设置类型则直接默认
+*
+*/
 
 if(!isset($_REQUEST['type'])){
     $_REQUEST['type'] = 0;
@@ -75,8 +72,6 @@ if(!isset($_REQUEST['type'])){
 * 判断访问类型是否定义 否则默认
 * 0 访问 1 提交POST
 */
-
-
 if(($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')){
     if(!isset($_REQUEST['model'])){
         $_REQUEST['model'] = 'index';
@@ -89,12 +84,12 @@ if(($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')){
     if(!isset($_REQUEST['page'])){
         $_REQUEST['page'] = 'index';
     }
+
     /**
     *
     * 加载模板文件
     *
     */
-
     //判断页面参数是否有扩展名
     if(strpos($_REQUEST['page'],'.') === FALSE && strpos($_REQUEST['page'],'_') === FALSE){
         $_REQUEST['page'] = $_REQUEST['page'].'.html';
@@ -167,13 +162,6 @@ if(($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')){
         echo('Can\'t find the methods!');
     }
 }
-
-
-
-//echo ROOT . 'default / '.$_REQUEST['model'].'.html';
-
-
-
 
 
 ?>
