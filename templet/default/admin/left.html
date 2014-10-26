@@ -1,0 +1,84 @@
+
+<div class="bs-docs-section">
+
+    <h2 id="js-overview" class="page-header">
+        系统设置
+    </h2>
+
+    <h4 id="js-individual-compiled">
+        设置学校名称
+    </h4>
+    <p>
+        <form   id="uptitleform" action="index.php?type=1&method=upwebname" method="POST" role="form">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon glyphicon-cog">
+                    </span>
+                </span>
+                <input type="text" style="maxlength:20;"  maxlength="20" name="title" class="form-control" placeholder="@label(EDU-WEBNAME)" >
+                <span class="input-group-btn">
+                    <button class="btn btn-default "  type="button"  id="btntitle">
+                        修改
+                    </button>
+                </span>
+
+            </div>
+        </form>
+    </p>
+
+    <h4 id="js-data-attrs">
+        设置首页图片文件信息
+    </h4>
+    <p>
+
+        <form role="form"  id="uplogoform" name="uplogoform" action="index.php?type=1&method=uplogo" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="example1">
+                    标题
+                </label>
+                <input type="input" style="maxlength:40;"  maxlength="40"  class="form-control" name="logotitle" placeholder="@label(EDU-HOMETITLE) ">
+            </div>
+            <div class="form-group">
+                <label for="example2">
+                    内容
+                </label>
+                <input type="text" style="maxlength:250;"  maxlength="250"  class="form-control" name="logotext" placeholder="@label(EDU-HOMETEXT) ">
+            </div>
+            <button type="button" class="btn btn-default" id="btnlogo"  >
+                修改
+            </button>
+        </form>
+    </p>
+    <div class="form-group">
+        <label for="exampleInputFile">
+            设置首页图片文件
+        </label>
+        <p class="help-block">
+            推荐采用大图 尺寸 1000*1000
+        </p>
+    </div>
+    <p>
+
+        <form   id="uplogofile" action="index.php?type=1&method=uplogofile" method="POST" role="form" enctype="multipart/form-data" target="hidden_frame">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class=" glyphicon glyphicon-picture">
+                    </span>
+                </span>
+                <input type="file" style="height: 0px;width: 0px;display: none;"  name="myfile" class="form-control myfile" target="hidden_frame"  >
+                <input type="text"  id="myfile" class="form-control" placeholder="点击选择要上传的图片" >
+                <span class="input-group-btn">
+                    <button class="btn btn-default "  type="button"  id="logofile">
+                        修改
+                    </button>
+                </span>
+            </div>
+        </form>
+        <iframe style="display:none;" name='hidden_frame' id="hidden_frame">
+        </iframe>
+    </p>
+
+
+
+</div>
+

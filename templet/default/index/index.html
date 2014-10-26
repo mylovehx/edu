@@ -1,15 +1,15 @@
 @load(public./head.html)
 @css(css./index.css)
 
-<body>
+
 
 <div class="bg-image hidden-xs" id="content" >
     <div class="container" id="homebg" >
         <h1 id="hometext">
-            敞亮的教室
+            @label(EDU-HOMETITLE)
         </h1>
         <p style="max-width: 420px;" class="textform">
-            我们有一个宽敞明亮的教室,那里,既充满朗朗的读书声,又充满清脆的欢笑声,我们在里面快乐的学习。
+             @label(EDU-HOMETEXT)
         </p>
     </div>
 </div>
@@ -24,7 +24,7 @@
                 <div id="imgkk" class="">
 
                     <a href="#" >
-                        <img id="indeximg" src="@load(img./shuji.jpg)" alt="image">
+                        <img id="indeximg" src="@load(img./upimgfile./shuji.jpg)" alt="image">
                     </a>
 
                     <div class="caption imagetext">
@@ -73,16 +73,19 @@
 
         <div class="col-md-5 col-sm-5">
             <ul class="list-group">
-            
-            @loop(8)
-            {
+
+                @traversal(newlist)
+                {
                 <li class="list-group-item indexlist panel-bullhorn-text">
                     <nobr>
-                    	<span class="glyphicon glyphicon-file"></span>
-                        <a href=".">我校成功完成上级交代的招生任务....</a>
+                        <span class="glyphicon glyphicon-file">
+                        </span>
+                        <a href="./$newlist.edu_id">
+                            $newlist.edu_title
+                        </a>
                     </nobr>
                 </li>
-            }
+                }
 
             </ul>
 
@@ -91,144 +94,29 @@
             @load(public./notice.html)
         </div>
     </div>
-	
+
     <div class="row">
-    
+
         <div class="col-md-9 col-sm-9">
-        @traversal(newstype)
-    	{
+            @loops(newstype)
+            {
             <div class="bs-example bs-example-tabs" >
-            <div class="captiontable">$newstype.name</div>
-                <ul id="myTab$$" class="nav nav-tabs" role="tablist">
-                    <li class="active">
-                        <a href="#home$$" role="tab" data-toggle="tab">
-                            校园风光
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#profile$$" role="tab" data-toggle="tab">
-                            校园活动
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#page1$$" role="tab" data-toggle="tab">
-                            活力校园
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#page2$$" role="tab" data-toggle="tab">
-                            学生安全
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#page3$$" role="tab" data-toggle="tab">
-                            学生教育
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">
-                            更多...
-                            <span class="caret">
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
-                            <li>
-                                <a href="#dropdown1$$" tabindex="-1" role="tab" data-toggle="tab">
-                                    其他1
-                                </a>
+                <div class="captiontable">
+                    $newstype.edu_name
+                </div>
+                <div id="myTab$#Content" class="tab-content">
+                    <div class="tab-pane fade in active" id="home$#">
+                        <ul class="list-group">
+                            @traversal($newstype.edu_id)
+                            {
+                            <li class="list-group-item indexlistgroup">
+                                <span class="glyphicon glyphicon-file">
+                                </span>
+                                <span class="badge">
+                                    $$newstype.edu_id.edu_time
+                                </span>
+                                <a href="./$$newstype.edu_id.edu_id">$$newstype.edu_id.edu_title</a>
                             </li>
-                            <li>
-                                <a href="#dropdown2$$" tabindex="-1" role="tab" data-toggle="tab">
-                                    其他2
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <div id="myTab$$Content" class="tab-content">
-                    <div class="tab-pane fade in active" id="home$$">
-                        <ul class="list-group">
-                        	@traversal(newslist,pagelist)
-                        	{
-                        		<li class="list-group-item indexlistgroup">
-                        		<span class="glyphicon glyphicon-file"></span>
-								$pagelist
-                                <span class="badge">
-                                    $newslist.tag
-                                </span>$newslist.name</li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="profile$$">
-                        <ul class="list-group">
-                        	@traversal(newslist,pagelist)
-                        	{
-                        		<li class="list-group-item indexlistgroup">
-                        		<span class="glyphicon glyphicon-file"></span>
-                                $pagelist
-                                <span class="badge">
-                                    $newslist.tag
-                                </span>$newslist.name</li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="page1$$">
-                        <ul class="list-group">
-                        	@traversal(newslist,pagelist)
-                        	{
-                        		<li class="list-group-item indexlistgroup"><span class="glyphicon glyphicon-file"></span>
-                                $pagelist
-                                <span class="badge">
-                                    $newslist.tag
-                                </span>$newslist.name</li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="page2$$">
-                        <ul class="list-group">
-                        	@traversal(newslist,pagelist)
-                        	{
-                        		<li class="list-group-item indexlistgroup"><span class="glyphicon glyphicon-file"></span>
-                                $pagelist
-                                <span class="badge">
-                                    $newslist.tag
-                                </span>$newslist.name</li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="page3$$">
-                        <ul class="list-group">
-                        	@traversal(newslist,pagelist)
-                        	{
-                        		<li class="list-group-item indexlistgroup"><span class="glyphicon glyphicon-file"></span>
-                                $pagelist
-                                <span class="badge">
-                                    $newslist.tag
-                                </span>$newslist.name</li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="dropdown1$$">
-                        <ul class="list-group">
-                        	@traversal(newslist,pagelist)
-                        	{
-                        		<li class="list-group-item indexlistgroup"><span class="glyphicon glyphicon-file"></span>
-                                $pagelist
-                                <span class="badge">
-                                    $newslist.tag
-                                </span>$newslist.name</li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="dropdown2$$">
-                        <ul class="list-group">
-                        	@traversal(newslist,pagelist)
-                        	{
-                        		<li class="list-group-item indexlistgroup"><span class="glyphicon glyphicon-file"></span>
-                                $pagelist
-                                <span class="badge">
-                                    $newslist.tag
-                                </span>$newslist.name</li>
                             }
                         </ul>
                     </div>
@@ -244,6 +132,6 @@
         </div>
 
     </div>
-    
+
 </div>
 @load(public./fundus.html)

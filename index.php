@@ -129,10 +129,10 @@ if(($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')){
     $html_text = file_get_contents($file);
     //压缩HTML
     systems::compress_html($html_text);
-    M($html_text);//处理代码
-    if(extension_loaded('zlib')){
+        if(extension_loaded('zlib')){
         ob_start('ob_gzip');
     }
+    M($html_text);//处理代码
     echo($html_text);
     if(extension_loaded('zlib')){
         ob_end_flush();
@@ -151,7 +151,7 @@ if(($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')){
                 ob_start('ob_gzip');
             }
             $returntext = '';
-            func::creat()->$_REQUEST['method']($_REQUEST,$returntext);
+            func::creat()->$_REQUEST['method']($_REQUEST,$returntext,$_FILES);
             if(extension_loaded('zlib')){
                 ob_end_flush();
             }

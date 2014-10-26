@@ -1,13 +1,34 @@
 <?php
 class templetfunction
 {
+    // 保存类实例在此属性中
+    private static $instance;
+    // 构造方法声明为private，防止直接创建对象
+    private function __construct()
+    {
+    }
+    // singleton 方法
+    public static function creat()
+    {
+        if(!isset(self::$instance)){
+            $c = __CLASS__;
+            self::$instance = new $c();
+        }
+        return self::$instance;
+    }
+
+    // 阻止用户复制对象实例
+    public function __clone()
+    {
+        trigger_error('Clone is not allowed.', E_USER_ERROR);
+    }
+
 
     public function __call($name, $arguments)
     {
         //var_dump($arguments);
         return '';
     }
-
     /**
     * 自定义函数，载入HTML文件
     * 自定义参数
@@ -82,49 +103,82 @@ class templetfunction
 
     public function loop( & $htmltext, & $code , & $arguments, & $func_in, & $func_ot)
     {
-        $strlen   = strlen($htmltext);
-        $loop_in  = 0;
-        $text     = '';
-        $in_count = 0;
-        for($in = $func_ot; $in < $strlen; ++$in){
-            if($in < 3){
-                break;
-            }
-            if($loop_in == 0 && $htmltext[$in] == '{' && $htmltext[$in - 1] != '\\'){
-                $loop_in = $in + 1;
-            }else
-            if($htmltext[$in] == '{' && $htmltext[$in - 1] == '\\'){
-                $htmltext[$in - 1] = '  ';
-            }
-            if($loop_in > 0 && $htmltext[$in] == '{' && $htmltext[$in - 1] != '\\'){
-                ++$in_count;
-            }
 
-            if($loop_in > 0 && $htmltext[$in] == '}' && $htmltext[$in - 1] != '\\'){
-                --$in_count;
-            }
-            if($loop_in > 0 && $htmltext[$in] == '}' && $htmltext[$in - 1] != '\\' && $in_count == 0){
-                //取得函数体模板
-                $modeltext = substr($htmltext,$loop_in ,$in - $loop_in);
-                break;
-            }else
-            if($htmltext[$in] == '}' && $htmltext[$in - 1] == '\\'){
-                $htmltext[$in - 1] = '  ';
-            }
-        }
+        $text = '';
+        self::select($htmltext,  $code ,  $arguments,  $func_in,  $func_ot,$modeltext);
         //重复函数体模板
-        $text     = str_repeat($modeltext,$arguments[0]);
-        //删除模板部分
-        $htmltext = str_replace('{'.$modeltext.'}','',$htmltext);
+        $text = str_repeat($modeltext,$arguments[0]);
         return $text;
 
     }
-    public function traversal( & $htmltext, & $code , & $arguments, & $func_in, & $func_ot)
+    public function traversal( & $htmltext, & $ucode , & $arguments, & $func_in, & $func_ot)
+    {
+
+        $text   = '';
+        self::select($htmltext,  $ucode ,  $arguments,  $func_in,  $func_ot,$modeltext);
+        //初始化替换模板。
+        $arglen = count(G($arguments[0]));
+        $temp   = '';
+        //替换循环变量$$
+        for($ss = 0; $ss < $arglen; $ss++){
+            $temp .= str_replace('$#',$ss + 1,$modeltext);
+        }
+
+        $arglen = count($arguments);
+        for($ii = 0; $ii < $arglen; $ii++){
+            $code = G($arguments[$ii]);
+            $lent = count($code);
+            for($ll = 0; $ll < $lent; $ll++){
+                $keynames    = array_keys($code[$ll]);
+                $keynameslen = count($keynames);
+                if($ll == 0){
+                    $onelen = $lent;
+                }
+                for($ol = 0; $ol < $keynameslen; $ol++){
+                    $item    = '$'.$arguments[$ii] . '.' .$keynames[$ol];
+                    $keyname = $keynames[$ol];
+                    $keyname = $code[$ll][$keyname];
+                    $pos     = strpos($temp,$item);
+                    if($pos !== FALSE){
+                        $temp = substr_replace($temp,$keyname,$pos,strlen($item));
+                        if($ol == $keynameslen - 1 && $keynameslen == $onelen && isset($code[$ll + 1])){
+                            $keyname = $keynames[$ol];
+                            $keyname = $code[$ll + 1][$keyname];
+                            $temp    = str_replace($item,$keyname,$temp);
+                        }
+                    }
+                }
+            }
+        }
+        return $temp;
+    }
+    public function loops( & $htmltext, & $code , & $arguments, & $func_in, & $func_ot)
+    {
+        $text   = '';
+        self::select($htmltext,  $code ,  $arguments,  $func_in,  $func_ot,$modeltext);
+        //初始化替换模板。
+        $arg    = G($arguments[0]);
+        $arglen = count($arg);
+        $temp   = '';
+        //替换循环变量$#
+        for($ss = 0; $ss < $arglen; $ss++){
+            $temp      = str_replace('$#',$ss + 1,$modeltext);
+            $ages      = $arg[$ss];
+            $agesnames = array_keys($arg[$ss]);
+            $ageslen   = count($ages);
+            for($ll = 0; $ll < $ageslen; $ll++){
+                $temp = str_replace( '$'.$arguments[0].'.'.$agesnames[$ll],$ages[$agesnames[$ll]],$temp);
+            }
+            $text .= $temp;
+        }
+        return $text;
+    }
+
+    function select( & $htmltext, & $code , & $arguments, & $func_in, & $func_ot, & $modeltext)
     {
         $strlen    = strlen($htmltext);
         $loop_in   = 0;
         $modeltext = '';
-        $text      = '';
         $model     = '';
         $in_count  = 0;
 
@@ -150,8 +204,9 @@ class templetfunction
 
             //循环判断函数体结尾
             if($loop_in > 0 && $htmltext[$in] == '}' && $htmltext[$in - 1] != '\\' && $in_count == 0){
-                $model     = substr($htmltext,$loop_in - 1 ,$in - $loop_in + 2);
+                //$model = substr($htmltext,$loop_in - 1 ,$in - $loop_in + 2);
                 $modeltext = substr($htmltext,$loop_in  ,$in - $loop_in );
+                $model     = '{'.$modeltext.'}' ;
                 break;
             }else
             if($htmltext[$in] == '}' && $htmltext[$in - 1] == '\\'){
@@ -159,51 +214,17 @@ class templetfunction
             }
 
         }
-        //var_dump(strpos(strtolower($modeltext),'@traversal'));
-        if(is_array($arguments)){
-            $tabs = array();
-            $len = count($arguments);
-            if($len > 0){
-                //动态调用取出数组并插入到新数组内
-                for($is = 0; $is < $len; ++$is){
-                    //$arrays = tab::creat()->get($arguments[$is]);
-                    $tabs[$arguments[$is]] = G($arguments[$is]);
-                }
-                $alen = count($arguments);
-                //第一层循环 循环动态变量名
-                for($il = 0; $il < $alen; ++$il){
-                    $klen = count($tabs[$arguments[$il]]);
-                    //第三层循环 循环动态数组子类
-                    for($ik = 0; $ik < $klen; ++$ik){
-                        //取动态数组所有键名
-                        if(is_array($tabs[$arguments[$il]][$ik])){
-                            $keynames = array_keys($tabs[$arguments[$il]][$ik]);
-                            $knlen    = count($keynames);
-                            //初始化替换模板。
-                            $temp     = $modeltext;
-                            //循环动态数组子类名
-                            for($io = 0; $io < $knlen; ++$io){
-                                //替换数组循环变量
-                                $temp = str_replace('$'.$arguments[$il].'.'.$keynames[$io],$tabs[$arguments[$il]][$ik][$keynames[$io]],$temp);
-                            }
-                            //替换遍历值
-                            $text .= str_replace('$$',$ik + 1,$temp);
-                        }else{
-                            if(($ik + 1) == $klen){
-                                //替换文本变量
-                                $text = str_replace('$'.$arguments[$il],$tabs[$arguments[$il]][$ik],$text);
-                            }else{
-                                //替换文本变量不足总数部分统一替换
-                                $text = substr_replace($text,$tabs[$arguments[$il]][$ik],strpos($text,'$'.$arguments[$il]),strlen('$'.$arguments[$il]));
-                            }
-                        }
-                    }
-                }
-            }
-        }
         //删除模板部分
         $htmltext = str_replace($model,'',$htmltext);
-        return $text;
+    }
+
+    public function label( & $htmltext, & $code , & $arguments, & $func_in, & $func_ot)
+    {
+	if(isset($arguments[0])){
+		$arr = db::creat()->label($arguments[0])[0];
+		return $arr['edu_values'];
+	}
+	return '';
     }
 
 }

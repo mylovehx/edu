@@ -13,6 +13,7 @@
     @load(css./bootstrap.min.css)
     @load(css./docs.min.css)
     @load(css./public.css)
+    @load(css./patch.css)
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -20,12 +21,12 @@
     <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <title>
-        主页
+        @label(EDU-WEBNAME) - 主页
     </title>
       
 </head>
 
-
+<body>
 <header class="navbar navbar-static-top bs-docs-nav head-bg" id="top" role="banner">
     <div class="container " >
         <div class="navbar-header">
@@ -39,7 +40,7 @@
                 <span class="icon-bar">
                 </span>
             </button>
-            <a href="#" class="navbar-brand">EDUCATION 教育学院
+            <a href="#" class="navbar-brand">@label(EDU-WEBNAME)
             </a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse head-bg" role="navigation">
