@@ -1,6 +1,6 @@
-$(document).ready(function(){
-	
-	var  time ;
+$(document).ready(function($){
+
+        var  time ;
         //修改首页标题
         $("#btntitle").click(function(){
                 ajaxfunc('#uptitleform');
@@ -12,8 +12,10 @@ $(document).ready(function(){
             });
 
         $("#myfile").click(function(){
+                $('.myfile').val('')
                 $('.myfile').click();
-               time =  setInterval(function () {
+                window.clearInterval(time);
+                time =  setInterval(function () {
                         $("#myfile").val($('.myfile').val());
                     }, 500);
 
@@ -23,11 +25,38 @@ $(document).ready(function(){
         $("#logofile").click(function(){
                 $('#uplogofile').submit();
                 window.clearInterval(time);
-                $("#myfile").val('');
-                
+                $('.myfile').val('')
+                time = setInterval(function () {
+                        var text = $(window.frames["hidden_frame"].document).contents().text();
+                        if($("#myfile").val()!=""){
+                            alert(text);
+                        }
+                        $("#myfile").val('');
+                    }, 1000);
+
             });
 
+        $('.navsave').click(function(){
+                ajaxfunc($(this).parent().parent().children());
+            });
 
+        $('.contentsave').click(function(){
+                ajaxfunc($(this).parent().parent().children());
+            });
+
+	$('.menuclick').click(function(){
+		$('.menuclass').html($(this).html()+'<span class="caret"></span>');
+		$('#menuclass').val($(this).attr('id'));
+	});
+	
+
+        $('.navshow').click(function(){
+                if($(this).parent().children().attr('value') == '0'){
+                    $(this).parent().children().attr('value','1')
+                }else{
+                    $(this).parent().children().attr('value','0')
+                }
+            });
     });
 
 function ajaxfunc(uid){

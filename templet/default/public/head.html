@@ -49,22 +49,12 @@
                     <a href=".?/index">网站首页
                     </a>
                 </li>
+                @traversal(nav){
                 <li>
-                    <a href=".?/index/list">学校概况
+                    <a href="$nav.edu_link">$nav.edu_name
                     </a>
                 </li>
-                <li>
-                    <a href=".?/index/read">政务公开
-                    </a>
-                </li>
-                <li>
-                    <a href="#">网上办事
-                    </a>
-                </li>
-                <li>
-                    <a href="#">校园风采
-                    </a>
-                </li>
+                }
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>

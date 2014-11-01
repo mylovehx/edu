@@ -1,84 +1,326 @@
 
 <div class="bs-docs-section">
 
-    <h2 id="js-overview" class="page-header">
-        系统设置
-    </h2>
+	<h2 id="js-overview" class="page-header">
+		系统设置
+	</h2>
 
-    <h4 id="js-individual-compiled">
-        设置学校名称
-    </h4>
-    <p>
-        <form   id="uptitleform" action="index.php?type=1&method=upwebname" method="POST" role="form">
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon glyphicon-cog">
-                    </span>
-                </span>
-                <input type="text" style="maxlength:20;"  maxlength="20" name="title" class="form-control" placeholder="@label(EDU-WEBNAME)" >
-                <span class="input-group-btn">
-                    <button class="btn btn-default "  type="button"  id="btntitle">
-                        修改
-                    </button>
-                </span>
+	<h4 id="js-individual-compiled">
+		设置学校名称
+	</h4>
+	<p>
+		<form id="uptitleform" action="index.php?type=1&method=upwebname" method="POST" role="form">
+			<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon glyphicon-cog">
+					</span>
+				</span>
+				<input type="text" style="maxlength:20;" maxlength="20" name="title" class="form-control" value="@label(EDU-WEBNAME)" >
+				<span class="input-group-btn">
+					<button class="btn btn-default " type="button" id="btntitle">
+						修改
+					</button>
+				</span>
 
-            </div>
-        </form>
-    </p>
+			</div>
+		</form>
+	</p>
 
-    <h4 id="js-data-attrs">
-        设置首页图片文件信息
-    </h4>
-    <p>
+	<h4 id="js-data-attrs">
+		设置首页图片信息
+	</h4>
+	<p>
 
-        <form role="form"  id="uplogoform" name="uplogoform" action="index.php?type=1&method=uplogo" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="example1">
-                    标题
-                </label>
-                <input type="input" style="maxlength:40;"  maxlength="40"  class="form-control" name="logotitle" placeholder="@label(EDU-HOMETITLE) ">
-            </div>
-            <div class="form-group">
-                <label for="example2">
-                    内容
-                </label>
-                <input type="text" style="maxlength:250;"  maxlength="250"  class="form-control" name="logotext" placeholder="@label(EDU-HOMETEXT) ">
-            </div>
-            <button type="button" class="btn btn-default" id="btnlogo"  >
-                修改
-            </button>
-        </form>
-    </p>
-    <div class="form-group">
-        <label for="exampleInputFile">
-            设置首页图片文件
-        </label>
-        <p class="help-block">
-            推荐采用大图 尺寸 1000*1000
-        </p>
-    </div>
-    <p>
+		<form role="form" id="uplogoform" name="uplogoform" action="index.php?type=1&method=uplogo" method="POST" enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="example1">
+					标题
+				</label>
+				<input type="input" style="maxlength:40;" maxlength="40" class="form-control" name="logotitle" value="@label(EDU-HOMETITLE) ">
+			</div>
+			<div class="form-group">
+				<label for="example2">
+					内容
+				</label>
+				<input type="text" style="maxlength:250;" maxlength="250" class="form-control" name="logotext" value="@label(EDU-HOMETEXT) ">
+			</div>
+			<button type="button" class="btn btn-default" id="btnlogo" >
+				修改
+			</button>
+		</form>
+	</p>
+	<div class="form-group" id="js-data-js-data-file">
+		<label for="exampleInputFile">
+			设置首页图片文件
+		</label>
+		<p class="help-block">
+			推荐采用大图 尺寸 1000*1000
+		</p>
 
-        <form   id="uplogofile" action="index.php?type=1&method=uplogofile" method="POST" role="form" enctype="multipart/form-data" target="hidden_frame">
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class=" glyphicon glyphicon-picture">
-                    </span>
-                </span>
-                <input type="file" style="height: 0px;width: 0px;display: none;"  name="myfile" class="form-control myfile" target="hidden_frame"  >
-                <input type="text"  id="myfile" class="form-control" placeholder="点击选择要上传的图片" >
-                <span class="input-group-btn">
-                    <button class="btn btn-default "  type="button"  id="logofile">
-                        修改
-                    </button>
-                </span>
-            </div>
-        </form>
-        <iframe style="display:none;" name='hidden_frame' id="hidden_frame">
-        </iframe>
-    </p>
+		<p>
+			<form id="uplogofile" action="index.php?type=1&method=uplogofile" method="POST" role="form" enctype="multipart/form-data" target="hidden_frame">
+				<div class="input-group">
+					<span class="input-group-addon">
+						<span class=" glyphicon glyphicon-picture">
+						</span>
+					</span>
+					<input type="file" style="height: 0px;width: 0px;display: none;" name="myfile" class="form-control myfile" >
+					<input type="text" id="myfile" class="form-control" placeholder="点击选择要上传的图片" readonly="" style="cursor:pointer;" >
+					<span class="input-group-btn">
+						<button class="btn btn-default " type="button" id="logofile">
+							修改
+						</button>
+					</span>
+				</div>
+			</form>
+			<iframe style="display:none;" name='hidden_frame' id="hidden_frame">
+			</iframe>
+		</p>
+	</div>
+
+	<h2 id="js-navigation" class="page-header">
+		导航设置
+	</h2>
+	<p>
+		<div class="form-group" id="js-individual-navigation">
+			<label for="exampleInputFile">
+				设置首页导航栏
+			</label>
+			<p class="help-block">
+				最好不要超过10个,目前预留9个自定义导航栏目,目前不提供删除的功能可以选择不显示.
+			</p>
 
 
+			<div class="table-responsive ">
+
+				<table class="table table-hover ">
+					<thead>
+						<tr>
+							<th >
+								显示序号
+							</th>
+							<th >
+								勾选显示 / 导航名称
+							</th>
+							<th >
+								导航链接
+							</th>
+							<th>
+								操作
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@traversal(adminnav){
+
+						<tr>
+							<form id="upnav$#" action="index.php?type=1&method=upnavigate" method="POST" role="form" >
+								<td >
+									<div class="input-group">
+										<span class="input-group-addon">
+											No.
+										</span>
+										<input type="text" name="edu_order" style="width: 50px;maxlength:2;" maxlength="2" class="form-control" value="$adminnav.edu_order">
+									</div>
+								</td>
+								<td >
+									<div class="input-group">
+										<span class="input-group-addon">
+											<input type="hidden" value="$adminnav.edu_show" name="edu_show"/>
+											<input type="checkbox" class="navshow" $adminnav.edu_show_html >
+										</span>
+										<input type="text" name="edu_name" style="width: 150px;" class="form-control" value="$adminnav.edu_name">
+									</div>
+								</td>
+								<td >
+									<input type="text" name="edu_link" style="width: 440px;" class="form-control" value="$adminnav.edu_link"/>
+								</td>
+								<td>
+									<input type="hidden" value="$adminnav.edu_id" name="edu_id"/>
+									<button class="btn btn-default navsave" id="navsave" onclick="return false;">
+										修改
+									</button>
+								</td>
+							</form>
+						</tr>
+
+						}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</p>
+
+	<h2 id="js-content" class="page-header">
+		内容管理
+	</h2>
+
+
+	<div class="form-group" id="js-individual-content">
+		<label for="exampleInputFile">
+			设置内容分类
+		</label>
+		<p class="help-block">
+			最好不要超过10个,否则有影响网页处理效率和速度,预留10个,不可删除,但可以控制是否显示
+		</p>
+
+
+		<div class="table-responsive ">
+
+			<table class="table table-hover  ">
+				<thead>
+					<tr>
+						<th >
+							显示序号
+						</th>
+						<th >
+							勾选显示 / 分类名称
+						</th>
+						<th >
+							分类介绍
+						</th>
+						<th>
+							操作
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@traversal(admincontentclass){
+
+					<tr>
+						<form id="upcontent$#" action="index.php?type=1&method=upcontentclass" method="POST" role="form" >
+							<td >
+								<div class="input-group">
+									<span class="input-group-addon">
+										No.
+									</span>
+									<input type="text" name="edu_order" style="width: 50px;maxlength:2;" maxlength="2" class="form-control" value="$admincontentclass.edu_order">
+								</div>
+							</td>
+							<td >
+								<div class="input-group">
+									<span class="input-group-addon">
+										<input type="hidden" value="$admincontentclass.edu_show" name="edu_show"/>
+										<input type="checkbox" class="navshow" $admincontentclass.edu_show_html >
+									</span>
+									<input type="text" name="edu_name" style="width: 150px;" class="form-control" value="$admincontentclass.edu_name">
+								</div>
+							</td>
+							<td >
+								<input type="text" name="edu_summary" style="width: 440px;" class="form-control" value="$admincontentclass.edu_summary"/>
+							</td>
+							<td>
+								<input type="hidden" value="$admincontentclass.edu_id" name="edu_id"/>
+								<button class="btn btn-default contentsave" id="navsave" onclick="return false;">
+									修改
+								</button>
+							</td>
+						</form>
+					</tr>
+
+					}
+				</tbody>
+			</table>
+
+		</div>
+
+	</div>
+
+
+	<div class="form-group" id="js-text-content">
+		<label for="exampleInputFile">
+			管理文章
+		</label>
+		<p class="help-block">
+			文章列表
+		</p>
+
+	</div>
+
+
+	<div class="list-group">
+		@traversal(adminlist){
+		<a href="#" id="$adminlist.edu_id" class="list-group-item">
+			$adminlist.edu_title
+		</a>
+		}
+	</div>
+
+	<div >
+		<nav >
+			<ul class="pagination" style="margin: 0px;">
+				<li>
+					<a href="#">
+						&laquo;
+					</a>
+				</li>
+				@loop(20){
+				<li>
+					<a href="#">
+						1
+					</a>
+				</li>
+				}
+				<li>
+					<a href="#">
+						&raquo;
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
+	<div class="form-group" id="js-individual-content">
+		<label for="exampleInputFile">
+			编辑内容
+		</label>
+	</div>
+
+	@css(ueditor./ueditor.config.js)
+	@css(ueditor./ue.js)
+	@css(ueditor./ueditor.all.min.js)
+
+	<div>
+		<form id="upcontent$#" action="index.php?type=1&method=upcontentclass" method="POST" role="form" >
+			<div class="input-group">
+				<div class="input-group-btn">
+					<input id="menu_edu_id" type="hidden" value="0" name="edu_id"/>
+					<input id="menuclass" type="hidden" value="1" name="edu_class_id"/>
+					<input id="menu_edu_text" type="hidden" value="0" name="edu_text"/>
+					<button type="button" class="btn btn-default dropdown-toggle menuclass " data-toggle="dropdown">
+						分类修改
+						<span class="caret">
+						</span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						@traversal(nav){
+						<li>
+							<a id="$nav.edu_id" class="menuclick" href="#">
+								$nav.edu_name
+							</a>
+						</li>
+						}
+					</ul>
+				</div>
+				<input type="text" name="edu_name" class="form-control">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button">
+						保存修改
+					</button>
+				</span>
+			</div>
+			<script id="editor" type="text/plain" style="width:100%;height:320px;">
+			</script>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+		var ue = UE.getEditor('editor');
+		UE.getEditor('editor').setShow();
+	</script>
 
 </div>
 
