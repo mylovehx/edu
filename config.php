@@ -17,7 +17,6 @@ include(ROOT . "include./atuoload.php");
 */
 
 //全局过滤
-
 //$_POST = sql_injection($_POST);
 //$_GET = sql_injection($_GET);
 $_REQUEST = sql_injection($_REQUEST);
