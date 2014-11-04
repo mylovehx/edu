@@ -10,8 +10,9 @@ class systems
 	*/
 	public static function compress_html( & $file)
 	{
-		$temp = TEMPDIR.'./'.hash('md5',$file);
-		if (is_file($temp)) {
+		$temp        = TEMPDIR.'./'.hash('md5',$file);
+		$STATICCACHE = C('STATICCACHE');
+		if ($STATICCACHE && is_file($temp)) {
 			return file_get_contents($temp);
 		}
 		$string = file_get_contents($file);
@@ -19,8 +20,30 @@ class systems
 		$string = strtr($string,array('  '=>''));
 		$string = strtr($string,array('  '=>''));
 		$string = strtr($string,array('  '=>''));
-		file_put_contents($temp,$string);
+		if ($STATICCACHE) {
+			file_put_contents($temp,$string);
+		}
 		return $string;
+	}
+
+
+	public static function path($path)
+	{
+		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+			return str_replace('/','\\',$path);
+		}
+		else {
+			return str_replace('\\','/',$path);
+		}
+	}
+	public static function dirpath($path)
+	{
+		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+			return substr(strrchr(dirname($path), "\\"), 1);
+		}
+		else {
+			return substr(strrchr(dirname($path), "/"), 1);
+		}
 	}
 }
 

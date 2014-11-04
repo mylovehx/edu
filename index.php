@@ -135,7 +135,8 @@ if (($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')) {
 		ob_start('ob_gzip');
 	}
 	$temp = TEMPDIR.'./edu_'.hash('md5',$file);
-	if (is_file($temp)) {
+	$STATICCACHE = C('STATICCACHE');
+	if ($STATICCACHE&&is_file($temp)) {
 		$html_text = file_get_contents($temp);
 		if ($_SERVER['REQUEST_TIME'] - filectime($temp) > 5) {
 			$html_text = systems::compress_html($file);
@@ -148,7 +149,10 @@ if (($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')) {
 		//读入并压缩HTML
 		$html_text = systems::compress_html($file);
 		M($html_text);//处理代码
-		file_put_contents($temp,$html_text);
+		if($STATICCACHE)
+		{
+			file_put_contents($temp,$html_text);	
+		}
 	}
 	//输出处理后的HTML代码
 	echo $html_text;

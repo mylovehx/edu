@@ -241,39 +241,31 @@
 	</div>
 
 
-	<div class="list-group">
+	<div class="list-group" id="textlist">
 		@traversal(adminlist){
-		<a href="#" id="$adminlist.edu_id" class="list-group-item">
-			$adminlist.edu_title
+			
+		<a href="javascript:read($adminlist.edu_id);" class="list-group-item textclick">
+			$adminlist.edu_title<span class="badge">$adminlist.edu_time</span><span class="badge">$adminlist.edu_name</span>
 		</a>
+		
 		}
 	</div>
 
-	<div >
+	<div>
 		<nav >
 			<ul class="pagination" style="margin: 0px;">
+				@traversal(adminlistcount){
 				<li>
-					<a href="#">
-						&laquo;
-					</a>
-				</li>
-				@loop(20){
-				<li>
-					<a href="#">
-						1
+					<a href="javascript:padding($#);">
+						$#
 					</a>
 				</li>
 				}
-				<li>
-					<a href="#">
-						&raquo;
-					</a>
-				</li>
 			</ul>
 		</nav>
 	</div>
 
-	<div class="form-group" id="js-individual-content">
+	<div class="form-group" id="js-w-content">
 		<label for="exampleInputFile">
 			编辑内容
 		</label>
@@ -284,17 +276,17 @@
 	@css(ueditor./ueditor.all.min.js)
 
 	<div>
-		<form id="upcontent$#" action="index.php?type=1&method=upcontentclass" method="POST" role="form" >
+		<form id="sevecontent" action="index.php?type=1&method=writetext" method="POST" role="form" >
 			<div class="input-group">
 				<div class="input-group-btn">
 					<input id="menu_edu_id" type="hidden" value="0" name="edu_id"/>
-					<input id="menuclass" type="hidden" value="1" name="edu_class_id"/>
-					<input id="menu_edu_text" type="hidden" value="0" name="edu_text"/>
+					<input id="menuclass" type="hidden" value="1" name="edu_essayclass_id"/>
 					<button type="button" class="btn btn-default dropdown-toggle menuclass " data-toggle="dropdown">
 						分类修改
 						<span class="caret">
 						</span>
 					</button>
+
 					<ul class="dropdown-menu" role="menu">
 						@traversal(nav){
 						<li>
@@ -303,11 +295,20 @@
 							</a>
 						</li>
 						}
+						<li class="divider">
+						</li>
+						<li style="padding: 0px 20px;">
+							<div class="checkbox">
+								<label>
+									<input name="new" value="new" type="checkbox" id="newtext"> 重新发表
+								</label>
+							</div>
+						</li>
 					</ul>
 				</div>
-				<input type="text" name="edu_name" class="form-control">
+				<input type="text" name="edu_title" class="form-control" id="uptitle">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button">
+					<button class="btn btn-default" type="button" id="sevetext">
 						保存修改
 					</button>
 				</span>

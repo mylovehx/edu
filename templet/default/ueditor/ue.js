@@ -36,10 +36,7 @@ function getPlainTxt() {
     alert(arr.join('\n'))
 }
 function setContent(isAppendTo) {
-    var arr = [];
-    arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
-    UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
-    alert(arr.join("\n"));
+    UE.getEditor('editor').setContent( isAppendTo);
 }
 function setDisabled() {
     UE.getEditor('editor').setDisabled('fullscreen');

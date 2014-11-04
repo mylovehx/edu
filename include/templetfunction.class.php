@@ -45,16 +45,16 @@ class templetfunction
 			$file    = realpath(ROOT . 'templet./' . $filedir .'./'. $arguments[0]);
 			if (!is_file($file)) {
 				$filedir = 'default';
-				$file    = ROOT . 'templet./default./' . $arguments[0];
+				$file    = realpath(ROOT . 'templet./default./' . $arguments[0]);
 			}
+
 			//取文件扩展名
-			$ex = pathinfo($file, PATHINFO_EXTENSION);
+			$ex      = pathinfo($file, PATHINFO_EXTENSION);
+			$dirname = systems::dirpath($file);
 			switch ($ex) {
 				case 'js':
-				$dirname = substr(strrchr(dirname($file), "\\"), 1);
 				return '<script src="./templet/'.$filedir.'/'.$dirname.'/'.basename($file).'" ></script>';
 				case 'css':
-				$dirname = substr(strrchr(dirname($file), "\\"), 1);
 				return '<link rel="stylesheet" type="text/css" href="./templet/'.$filedir.'/'.$dirname.'/'.basename($file).'">';
 				case 'jpg':
 				case 'jpeg':
@@ -62,7 +62,6 @@ class templetfunction
 				case 'bmp':
 				case 'gif':
 				case 'svg':
-				$dirname = substr(strrchr(dirname($file), "\\"), 1);
 				return './templet/'.$filedir.'/'.$dirname.'/'.basename($file);
 				default:
 				//读取外部模板文件压缩外部文件大小
@@ -81,18 +80,17 @@ class templetfunction
 				$filedir = 'default';
 			}
 			//取文件扩展名
-			$ex = pathinfo($file, PATHINFO_EXTENSION);
+			$ex      = pathinfo($file, PATHINFO_EXTENSION);
+			$dirname = systems::dirpath($file);
 			switch ($ex) {
 				case 'css':{
 					//清除原代码
 					$htmltext = str_replace('</head>',$code.'</head>',str_replace($code,'',$htmltext));
-					$dirname  = substr(strrchr(dirname($file), "\\"), 1);
 					return '<link  rel="stylesheet" type="text/css" href="./templet/'.$filedir.'/'.$dirname.'/'.basename($file).'">';
 				}
 				case 'js':{
 					//清除原代码
 					$htmltext = str_replace('</head>',$code.'</head>',str_replace($code,'',$htmltext));
-					$dirname  = substr(strrchr(dirname($file), "\\"), 1);
 					return '<script  src="./templet/'.$filedir.'/'.$dirname.'/'.basename($file).'" ></script>';
 				}
 				default:
@@ -118,37 +116,55 @@ class templetfunction
 	public function traversal( & $htmltext, & $ucode , & $arguments, & $func_in, & $func_ot)
 	{
 		self::select($htmltext,  $ucode ,  $arguments,  $func_in,  $func_ot,$modeltext);
-		//初始化替换模板。
-		$arglen = count(G($arguments[0]));
 		$temp   = '';
 		//替换循环变量$$
-		for ($ss = 0; $ss < $arglen; $ss++) {
-			$temp .= str_replace('$#',$ss + 1,$modeltext);
-		}
 		$arglen = count($arguments);
 		for ($ii = 0; $ii < $arglen; $ii++) {
 			$code = G($arguments[$ii]);
-			$lent = count($code);
-			for ($ll = 0; $ll < $lent; $ll++) {
-				$keynames    = array_keys($code[$ll]);
-				$keynameslen = count($keynames);
-				if ($ll == 0) {
-					$onelen = $lent;
+			if(is_numeric($code)){
+				$paging = C('PAGING');
+				$pagingS = $code / $paging;
+				if($code > $pagingS * $paging){
+					++$pagingS;
 				}
-				for ($ol = 0; $ol < $keynameslen; $ol++) {
-					$item    = '$'.$arguments[$ii] . '.' .$keynames[$ol];
-					$keyname = $keynames[$ol];
-					$keyname = $code[$ll][$keyname];
-					$pos     = strpos($temp,$item);
-					if ($pos !== FALSE) {
-						$temp = substr_replace($temp,$keyname,$pos,strlen($item));
-						if ($ol == $keynameslen - 1 && $keynameslen == $onelen && isset($code[$ll + 1])) {
-							$keyname = $keynames[$ol];
-							$keyname = $code[$ll + 1][$keyname];
-							$temp    = str_replace($item,$keyname,$temp);
+				for ($ss = 0; $ss < $pagingS; $ss++) {
+					$temp .= str_replace('$#',$ss + 1,$modeltext);
+				}
+				return $temp;
+			}
+			$lent = count($code);
+			if (isset($code['count'])) {
+				--$lent;
+			}
+			if ($ii == 0) {
+				//初始化替换模板。
+				for ($ss = 0; $ss < $lent; $ss++) {
+					$temp .= str_replace('$#',$ss + 1,$modeltext);
+				}
+			}
+			for ($ll = 0; $ll < $lent; $ll++) {
+				if (is_array($code[$ll])) {
+					$keynames    = array_keys($code[$ll]);
+					$keynameslen = count($keynames);
+					if ($ll == 0) {
+						$onelen = $lent;
+					}
+					for ($ol = 0; $ol < $keynameslen; $ol++) {
+						$item    = '$'.$arguments[$ii] . '.' .$keynames[$ol];
+						$keyname = $keynames[$ol];
+						$keyname = $code[$ll][$keyname];
+						$pos     = strpos($temp,$item);
+						if ($pos !== FALSE) {
+							$temp = substr_replace($temp,$keyname,$pos,strlen($item));
+							if ($ol == $keynameslen - 1 && $keynameslen == $onelen && isset($code[$ll + 1])) {
+								$keyname = $keynames[$ol];
+								$keyname = $code[$ll + 1][$keyname];
+								$temp    = str_replace($item,$keyname,$temp);
+							}
 						}
 					}
 				}
+
 			}
 		}
 		return $temp;

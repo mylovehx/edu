@@ -54,6 +54,7 @@ class func
 	{
 		$REQUEST['title'] = ltrim($REQUEST['title']);
 		if (isset($REQUEST['title']) && strlen($REQUEST['title']) > 0) {
+			$REQUEST['title'] = substr(ltrim($REQUEST['title']),0,255);
 			$a = db::creat()->uplabel('EDU-WEBNAME',$REQUEST['title']);
 			echo('success:修改成功!');
 		}
@@ -65,12 +66,12 @@ class func
 	{
 		$bool = FALSE;
 		if (isset($REQUEST['logotitle']) && strlen($REQUEST['logotitle']) > 0) {
-			$REQUEST['logotitle'] = ltrim($REQUEST['logotitle']);
+			$REQUEST['logotitle'] = substr(ltrim($REQUEST['logotitle']),0,255);
 			$bool = db::creat()->uplabel('EDU-HOMETITLE',$REQUEST['logotitle']);
 		}
 
 		if (isset($REQUEST['logotext']) && strlen($REQUEST['logotext']) > 0) {
-			$REQUEST['logotext'] = ltrim($REQUEST['logotext']);
+			$REQUEST['logotext'] = substr(ltrim($REQUEST['logotext']),0,500);
 			$bool = db::creat()->uplabel('EDU-HOMETEXT',$REQUEST['logotext']);
 		}
 
@@ -87,6 +88,7 @@ class func
 		//var_dump($FILES['myfile']['type']);
 		if (isset($FILES['myfile']['tmp_name'])) {
 			if (strpos($FILES['myfile']['type'],'image') === FALSE) {
+				echo('error:格式错误!');
 				return FALSE;
 			}
 			$filename = '';
@@ -107,7 +109,7 @@ class func
 	public function upnavigate( & $REQUEST, & $returntext , & $FILES)
 	{
 		if (isset($REQUEST['edu_id']) && isset($REQUEST['edu_name']) && isset($REQUEST['edu_order']) && isset($REQUEST['edu_link']) && isset($REQUEST['edu_show']) ) {
-			if (db::creat()->upnav($REQUEST['edu_id'],$REQUEST['edu_name'],$REQUEST['edu_order'],$REQUEST['edu_show'],$REQUEST['edu_link'])) {
+			if (db::creat()->upnav((int)$REQUEST['edu_id'],substr($REQUEST['edu_name'],0,255),(int)$REQUEST['edu_order'],(int)$REQUEST['edu_show'],substr($REQUEST['edu_link'],0,255))) {
 				echo('success:修改成功!');
 			}
 			else {
@@ -121,7 +123,8 @@ class func
 	public function upcontentclass( & $REQUEST, & $returntext , & $FILES)
 	{
 		if (isset($REQUEST['edu_id']) && isset($REQUEST['edu_name']) && isset($REQUEST['edu_order']) && isset($REQUEST['edu_summary']) && isset($REQUEST['edu_show']) ) {
-			if (db::creat()->upcontentclass($REQUEST['edu_id'],$REQUEST['edu_name'],$REQUEST['edu_order'],$REQUEST['edu_show'],$REQUEST['edu_summary'])) {
+			//对输入文本做最高限制1000
+			if (db::creat()->upcontentclass((int)$REQUEST['edu_id'],substr($REQUEST['edu_name'],0,255),(int)$REQUEST['edu_order'],(int)$REQUEST['edu_show'],substr($REQUEST['edu_summary'],0,255))) {
 				echo('success:修改成功!');
 			}
 			else {
@@ -133,6 +136,58 @@ class func
 		}
 	}
 
+	public function getpage( & $REQUEST, & $returntext , & $FILES)
+	{
+		if (isset($REQUEST['page'])) {
+			$pagecount = (int)C('PAGING');
+			$page = (int)$REQUEST['page'] * $pagecount - $pagecount;
+			Global $count;
+			echo json_encode(db::creat()->loopessay(1,$page.','.$pagecount,'>=',$count));
+			/*
+			$text= '';
+			foreach ($arr as $key=>$val) {
+				$text .= '<a href="javascript:read('.$val['edu_id'].');" class="list-group-item textclick">'.$val['edu_title'].'</a>';
+			}
+			echo($text);
+			*/
+		}
+
+	}
+	public function readtext( & $REQUEST, & $returntext , & $FILES)
+	{
+		if (isset($REQUEST['eduid'])) {
+			echo json_encode(db::creat()->readtext((int)$REQUEST['eduid']));
+		}
+
+	}
+
+	public function writetext( & $REQUEST, & $returntext , & $FILES)
+	{
+		if (!isset($REQUEST['edu_user_id'])) {
+			$REQUEST['edu_user_id'] = 1;
+		}
+		if (
+			isset($REQUEST['edu_id']) &&
+			isset($REQUEST['edu_essayclass_id']) &&
+			isset($REQUEST['editorValue']) &&
+			isset($REQUEST['edu_title']) &&
+			isset($REQUEST['edu_user_id'])
+		) {
+			if (isset($REQUEST['new'])) {
+
+			}
+			else {
+				$bool = db::creat()->uptext((int)$REQUEST['edu_id'],(int)$REQUEST['edu_user_id'],substr($REQUEST['edu_title'],0,255),$REQUEST['editorValue'],(int)$REQUEST['edu_essayclass_id'],1);
+			}
+		}
+		if ($bool == TRUE) {
+			echo('success:修改成功!');
+		}
+		else {
+			echo('error:错误!');
+		}
+
+	}
 
 }
 

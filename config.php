@@ -6,6 +6,16 @@
 
 define('ROOT',strtr(dirname(__FILE__),'\\','/'). './');
 define('TEMPDIR',sys_get_temp_dir());
+//设置时间区域 上海
+date_default_timezone_set("Asia/Shanghai");
+
+
+if (isset($_COOKIE['session'])) {
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+}
+
 
 /**
 * 加载自动加载程序
@@ -44,8 +54,9 @@ function C($name)
 	$config['server'] = '127.0.0.1';
 	$config['user'] = 'root';
 	$config['passwd'] = '';
-	$config['DBNAME'] = 'edu-Default';
-
+	$config['DBNAME'] = 'edu-default';
+	$config['PAGING'] = 10;
+	$config['STATICCACHE'] = FALSE;
 	return $config[$name];
 }
 
@@ -60,13 +71,18 @@ function G($name)
 		case 'newlist':
 		return db::creat()->loopessay(1,8,'>=');
 		case 'adminlist':
-		return db::creat()->loopessay(1,10,'>=');
+		//全局文章总行数
+		Global $count;
+		return db::creat()->loopessay(1,10,'>=',$count);
+		case 'adminlistcount':
+		Global $count;
+		return $count;
 		case 'pagelist':
 		return db::creat()->loopessay();
 		case 'newstype':
 		return db::creat()->loopclass();
 		case 'nav':
-		return db::creat()->loopnav(1,'=');
+		return db::creat()->contentclass(1,'=');
 		case 'adminnav':
 		return db::creat()->loopnav();
 		case 'admincontentclass':
@@ -117,6 +133,7 @@ function M( & $html_text)
 				//载入模板函数对象
 				//调用自定义函数变量,返回并替换函数
 				$code    = (string)$code;
+				//$funcname 自定义函数名
 				$resou = templetfunction::creat()->$funcname($html_text,$code,$funcarg,$func_in,$in);
 				if (is_string($resou) && is_string($code)) {
 					$html_text = str_replace($code,$resou,$html_text);

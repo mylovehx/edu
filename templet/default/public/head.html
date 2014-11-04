@@ -1,77 +1,74 @@
 <!DOCTYPE HTML>
 <html lang="zh-cn">
 <head>
-    <meta charset="utf-8" />
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <!-- jquery -->
-    @load(js./jquery-1.9.0.js)
-    <!-- Bootstrap -->
-    @load(js./bootstrap.min.js)
-    @load(css./bootstrap.min.css)
-    @load(css./docs.min.css)
-    @load(css./public.css)
-    @load(css./patch.css)
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <title>
-        @label(EDU-WEBNAME) - 主页
-    </title>
-      
+	<meta charset="utf-8" />
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<!-- jquery -->
+	@load(js./jquery-1.9.0.js)
+	<!-- Bootstrap -->
+	@load(js./bootstrap.min.js)
+	@load(css./bootstrap.min.css)
+	@load(css./docs.min.css)
+	@load(css./public.css)
+	@load(css./patch.css)
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<title>
+		@label(EDU-WEBNAME) - 主页
+	</title>
+
 </head>
 
 <body>
 <header class="navbar navbar-static-top bs-docs-nav head-bg" id="top" role="banner">
-    <div class="container " >
-        <div class="navbar-header">
-            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-                <span class="sr-only">Toggle navigation
-                </span>
-                <span class="icon-bar">
-                </span>
-                <span class="icon-bar">
-                </span>
-                <span class="icon-bar">
-                </span>
-            </button>
-            <a href="#" class="navbar-brand">@label(EDU-WEBNAME)
-            </a>
-        </div>
-        <nav class="collapse navbar-collapse bs-navbar-collapse head-bg" role="navigation">
-            <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href=".?/index">网站首页
-                    </a>
-                </li>
-                @traversal(nav){
-                <li>
-                    <a href="$nav.edu_link">$nav.edu_name
-                    </a>
-                </li>
-                }
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" >
-                    <span class="glyphicon glyphicon-user">
-                                </span>
-                    登陆网站
-                    </a>
-                </li>
-                <li>
-                    <a href="#" >
-                    <span class="glyphicon glyphicon-envelope">
-                                </span>
-                    联系方式
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+	<div class="container " >
+		<div class="navbar-header">
+			<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+				<span class="sr-only">
+					Toggle navigation
+				</span>
+				<span class="icon-bar">
+				</span>
+				<span class="icon-bar">
+				</span>
+				<span class="icon-bar">
+				</span>
+			</button>
+			<a href="#" class="navbar-brand">
+				@label(EDU-WEBNAME)
+			</a>
+		</div>
+		<nav class="collapse navbar-collapse bs-navbar-collapse head-bg" role="navigation">
+			<ul class="nav navbar-nav">
+				<li class="active">
+					<a href=".?/index">
+						网站首页
+					</a>
+				</li>
+				@traversal(nav){
+				<li>
+					<a href="$nav.edu_link">
+						$nav.edu_name
+					</a>
+				</li>
+				}
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="javascript:login();" >
+						<span class="glyphicon glyphicon-user">
+						</span>
+						登陆网站
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </header>
