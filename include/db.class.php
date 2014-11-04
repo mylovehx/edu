@@ -20,7 +20,8 @@ class db
 			if (!mysqli_select_db(self::$dbh,C('DBNAME'))) {
 				echo 'select DB connect error';
 			}
-			mysqli_query(self::$dbh,'SET CHARACTER SET utf8');
+			//mysqli_query(self::$dbh,'SET CHARACTER SET utf8');
+			mysqli_query(self::$dbh,"SET NAMES 'utf8'");
 		} catch ( PDOException $e ) {
 			echo  'Connection failed: '  .  $e -> getMessage ();
 			die;
