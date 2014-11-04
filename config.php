@@ -83,6 +83,8 @@ function G($name)
 		return db::creat()->loopclass();
 		case 'nav':
 		return db::creat()->contentclass(1,'=');
+		case 'navlist':
+		return db::creat()->loopnav(1,'=');
 		case 'adminnav':
 		return db::creat()->loopnav();
 		case 'admincontentclass':
