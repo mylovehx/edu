@@ -9,7 +9,7 @@
 		设置学校名称
 	</h4>
 	<p>
-		<form id="uptitleform" action="index.php?type=1&method=upwebname" method="POST" role="form">
+		<form id="uptitleform" action="index.php?type=1&method=upwebname" method="POST" role="form" autocomplete="off">
 			<div class="input-group">
 				<span class="input-group-addon">
 					<span class="glyphicon glyphicon glyphicon-cog">
@@ -31,7 +31,7 @@
 	</h4>
 	<p>
 
-		<form role="form" id="uplogoform" name="uplogoform" action="index.php?type=1&method=uplogo" method="POST" enctype="multipart/form-data">
+		<form role="form" id="uplogoform" name="uplogoform" action="index.php?type=1&method=uplogo" method="POST" enctype="multipart/form-data" autocomplete="off">
 			<div class="form-group">
 				<label for="example1">
 					标题
@@ -58,7 +58,7 @@
 		</p>
 
 		<p>
-			<form id="uplogofile" action="index.php?type=1&method=uplogofile" method="POST" role="form" enctype="multipart/form-data" target="hidden_frame">
+			<form id="uplogofile" action="index.php?type=1&method=uplogofile" method="POST" role="form" enctype="multipart/form-data" target="hidden_frame" autocomplete="off">
 				<div class="input-group">
 					<span class="input-group-addon">
 						<span class=" glyphicon glyphicon-picture">
@@ -115,7 +115,7 @@
 						@traversal(adminnav){
 
 						<tr>
-							<form id="upnav$#" action="index.php?type=1&method=upnavigate" method="POST" role="form" >
+							<form id="upnav$#" action="index.php?type=1&method=upnavigate" method="POST" role="form" autocomplete="off">
 								<td >
 									<div class="input-group">
 										<span class="input-group-addon">
@@ -191,7 +191,7 @@
 					@traversal(admincontentclass){
 
 					<tr>
-						<form id="upcontent$#" action="index.php?type=1&method=upcontentclass" method="POST" role="form" >
+						<form id="upcontent$#" action="index.php?type=1&method=upcontentclass" method="POST" role="form" autocomplete="off">
 							<td >
 								<div class="input-group">
 									<span class="input-group-addon">
@@ -243,20 +243,24 @@
 
 	<div class="list-group" id="textlist">
 		@traversal(adminlist){
-			
-		<a href="javascript:read($adminlist.edu_id);" class="list-group-item textclick">
-			$adminlist.edu_title<span class="badge">$adminlist.edu_time</span><span class="badge">$adminlist.edu_name</span>
+		<a href="javascript:read($adminlist.edu_id)" class="list-group-item textclick">
+			$adminlist.edu_title
+			<span class="badge">
+				$adminlist.edu_time
+			</span>
+			<span class="badge">
+				$adminlist.edu_name
+			</span>
 		</a>
-		
 		}
 	</div>
 
 	<div>
-		<nav >
-			<ul class="pagination" style="margin: 0px;">
+		<nav>
+			<ul id="modern" class="pagination" style="margin: 0px;">
 				@traversal(adminlistcount){
 				<li>
-					<a href="javascript:padding($#);">
+					<a href="javascript:padding($#)">
 						$#
 					</a>
 				</li>
@@ -276,7 +280,7 @@
 	@css(ueditor./ueditor.all.min.js)
 
 	<div>
-		<form id="sevecontent" action="index.php?type=1&method=writetext" method="POST" role="form" >
+		<form id="sevecontent" action="index.php?type=1&method=writetext" method="POST" role="form" autocomplete="off">
 			<div class="input-group">
 				<div class="input-group-btn">
 					<input id="menu_edu_id" type="hidden" value="0" name="edu_id"/>
@@ -306,7 +310,7 @@
 						</li>
 					</ul>
 				</div>
-				<input type="text" name="edu_title" class="form-control" id="uptitle">
+				<input type="text" name="edu_title" class="form-control" id="uptitle" value="">
 				<span class="input-group-btn">
 					<button class="btn btn-default" type="button" id="sevetext">
 						保存修改
@@ -323,5 +327,152 @@
 		UE.getEditor('editor').setShow();
 	</script>
 
+
+
+	<h2 id="js-content" class="page-header">
+		会员管理
+	</h2>
+
+
+	<div class="form-group" id="js-vip">
+		<label for="exampleInputFile">
+			设置会员信息
+		</label>
+		<p class="help-block">
+			默认会员密码:123456
+		</p>
+		<div class="table-responsive " id="js-vip-content">
+			<table class="table table-hover  ">
+				<thead>
+					<tr>
+						<th >
+							会员组名
+						</th>
+						<th >
+							勾选允许登录 / 会员昵称
+						</th>
+						<th >
+							会员个性签名
+						</th>
+						<th>
+							操作
+						</th>
+					</tr>
+				</thead>
+				<tbody >
+
+					@traversal(adminvip){
+
+					<tr class="viplist">
+						<form id="upvip$#" action="index.php?type=1&method=upvip" method="POST" role="form" autocomplete="off">
+							<td >
+								<div class="input-group-btn">
+									<input id="menu_edu_id" type="hidden" value="$adminvip.edu_id" name="edu_id"/>
+									<input class="edu_class_id" type="hidden" value="$adminvip.edu_class_id" name="edu_class_id"/>
+									<button style="width: 100px;" type="button" class="btn btn-default dropdown-toggle vipclass " data-toggle="dropdown">
+										$adminvip.edu_classname
+										<span class="caret">
+										</span>
+									</button>
+									<input type="hidden" value="" name="edu_user"/>
+									<ul class="dropdown-menu" role="menu">
+										@traversal(getvip){
+										<li>
+											<a id="$getvip.edu_id" class="vipsclick" href="#">
+												$getvip.edu_name
+											</a>
+										</li>
+										}
+									</ul>
+								</div>
+							</td>
+							<td >
+								<div class="input-group">
+									<span class="input-group-addon">
+										<input type="hidden" value="$adminvip.edu_login" name="edu_login"/>
+										<input type="checkbox" class="navlogin" $adminvip.edu_login_html >
+									</span>
+									<input type="text" name="edu_name" style="width: 150px;" class="form-control" value="$adminvip.edu_name" placeholder="$adminvip.edu_user">
+								</div>
+							</td>
+							<td >
+								<input type="text" name="edu_sign" style="width: 400px;" class="form-control" value="$adminvip.edu_sign"/>
+							</td>
+							<td>
+								<button class="btn btn-default vipsave" id="vipsave" onclick="return false;">
+									修改会员
+								</button>
+							</td>
+						</form>
+					</tr>
+
+					}
+
+					<tr>
+						<form id="newvip" action="index.php?type=1&method=upvip" method="POST" role="form" autocomplete="off" >
+							<td >
+								<div class="input-group-btn dropup">
+									<input type="hidden" value="0" name="edu_id"/>
+									<input class="edu_class_id" type="hidden" value="2" name="edu_class_id"/>
+									<button style="width: 100px;" type="button" class="btn btn-default dropdown-toggle vipclass " data-toggle="dropdown">
+										注册会员
+										<span class="caret">
+										</span>
+									</button>
+									<input type="hidden" value="" name="edu_sign"/>
+									<ul class="dropdown-menu" role="menu">
+										@traversal(getvip){
+										<li>
+											<a id="$getvip.edu_id" class="vipsclick" href="#">
+												$getvip.edu_name
+											</a>
+										</li>
+										}
+									</ul>
+								</div>
+							</td>
+							<td >
+								<div class="input-group">
+									<span class="input-group-addon">
+										<input type="hidden" value="1" name="edu_login"/>
+										<input type="checkbox" class="navlogin" checked="checked">
+									</span>
+									<input type="text" name="edu_name" style="width: 150px;" class="form-control" value="" placeholder="新会员昵称">
+								</div>
+							</td>
+							<td >
+								<input type="text" name="edu_user" style="width: 400px;" class="form-control" value="" placeholder="新会员账号"/>
+							</td>
+							<td>
+								<button class="btn btn-default newvipsave" id="newvipsave" onclick="return false;">
+									新增会员
+								</button>
+							</td>
+						</form>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+		</div>
+
+	</div>
+	<div>
+		<nav>
+			<ul class="pagination" style="margin: 0px;">
+				@traversal(vipcount){
+				<li>
+					<a href="./?/admin/index/vippage/$##js-vip-content">
+						$#
+					</a>
+				</li>}
+			</ul>
+		</nav>
+	</div>
+
 </div>
 
+<div id="messagecode" style="position:fixed; top:0; left: 0;width: 100%;z-index: 99999;overflow: auto;text-align: center;">
+
+</div>

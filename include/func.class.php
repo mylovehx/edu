@@ -143,29 +143,87 @@ class func
 			$page = (int)$REQUEST['page'] * $pagecount - $pagecount;
 			Global $count;
 			echo json_encode(db::creat()->loopessay(1,$page.','.$pagecount,'>=',$count));
-			/*
-			$text= '';
-			foreach ($arr as $key=>$val) {
-				$text .= '<a href="javascript:read('.$val['edu_id'].');" class="list-group-item textclick">'.$val['edu_title'].'</a>';
-			}
-			echo($text);
-			*/
 		}
 
+	}
+	public function getvippage( & $REQUEST, & $returntext , & $FILES)
+	{
+		if (isset($REQUEST['page'])) {
+			$pagecount = (int)C('PAGING');
+			$page = (int)$REQUEST['page'] * $pagecount - $pagecount;
+			Global $vipcount;
+			echo json_encode(db::creat()->getvips(1,$vipcount,$page.','.$pagecount,'>='));
+		}
 	}
 	public function readtext( & $REQUEST, & $returntext , & $FILES)
 	{
 		if (isset($REQUEST['eduid'])) {
-			echo json_encode(db::creat()->readtext((int)$REQUEST['eduid']));
+			$REQUEST['eduid'] = (int)$REQUEST['eduid'];
+			echo json_encode(db::creat()->readtext($REQUEST['eduid']));
 		}
 
 	}
+	public function deletetext( & $REQUEST, & $returntext , & $FILES)
+	{
+		if(isset($REQUEST['edu_id'])){
+			$REQUEST['edu_id'] = (int)$REQUEST['edu_id'];
+			if(db::creat()->delete_text($REQUEST['edu_id'])){
+				echo('success:删除成功!');
+			}else{
+				echo('success:删除失败!');
+			}
+		}
+	}
+	public function upvip( & $REQUEST, & $returntext , & $FILES)
+	{
+		if (isset($REQUEST['edu_id']) && isset($REQUEST['edu_name']) && isset($REQUEST['edu_class_id']) && isset($REQUEST['edu_sign']) && isset($REQUEST['edu_login']) ) {
+			//对输入文本做最高限制1000
+			if ((int)$REQUEST['edu_id'] == 0) {
+				if (ltrim($REQUEST['edu_user']) != '' && ltrim($REQUEST['edu_name']) != '') {
+					$bool = count(db::creat()->getvip($REQUEST['edu_user']));
+					if ($bool > 0) {
+						echo('error:用户账号已注册!');
+					}
+					else {
+						//默认密码
+						if (db::creat()->newvip($REQUEST['edu_user'],hash('md5',C('DEFAULT-PASSWD')),$REQUEST['edu_name'],substr($REQUEST['edu_sign'],0,255),(int)$REQUEST['edu_login'],(int)$REQUEST['edu_class_id'])) {
+							echo('success:新增成功!');
+						}
+						else {
+							echo('error:新增失败!');
+						}
+					}
 
+				}
+				else {
+					echo('error:用户账号和用户昵称不可为空!');
+				}
+
+				return;
+			}
+			else {
+				if (db::creat()->upvipmessage((int)$REQUEST['edu_id'],substr($REQUEST['edu_name'],0,255),(int)$REQUEST['edu_class_id'],(int)$REQUEST['edu_login'],substr($REQUEST['edu_sign'],0,255))) {
+					echo('success:修改成功!');
+				}
+				else {
+					echo('error:修改失败!');
+				}
+				return;
+			}
+
+		}
+		else {
+			echo('error:参数不能为空!');
+		}
+
+	}
 	public function writetext( & $REQUEST, & $returntext , & $FILES)
 	{
+		$bool = FALSE;
 		if (!isset($REQUEST['edu_user_id'])) {
 			$REQUEST['edu_user_id'] = 1;
 		}
+		$REQUEST['edu_type'] = 1;
 		if (
 			isset($REQUEST['edu_id']) &&
 			isset($REQUEST['edu_essayclass_id']) &&
@@ -173,11 +231,14 @@ class func
 			isset($REQUEST['edu_title']) &&
 			isset($REQUEST['edu_user_id'])
 		) {
+			$REQUEST['edu_title'] = substr($REQUEST['edu_title'],0,255);
+			$REQUEST['edu_essayclass_id'] = (int)$REQUEST['edu_essayclass_id'];
+			$REQUEST['edu_user_id'] = (int)$REQUEST['edu_user_id'];
 			if (isset($REQUEST['new'])) {
-
+				$bool = db::creat()->newtext($REQUEST['edu_title'],$REQUEST['editorValue'],$REQUEST['edu_essayclass_id'],$REQUEST['edu_user_id'],$REQUEST['edu_type'] );
 			}
 			else {
-				$bool = db::creat()->uptext((int)$REQUEST['edu_id'],(int)$REQUEST['edu_user_id'],substr($REQUEST['edu_title'],0,255),$REQUEST['editorValue'],(int)$REQUEST['edu_essayclass_id'],1);
+				$bool = db::creat()->uptext($REQUEST['edu_id'],$REQUEST['edu_user_id'],$REQUEST['edu_title'],$REQUEST['editorValue'],$REQUEST['edu_essayclass_id'],$REQUEST['edu_type'] );
 			}
 		}
 		if ($bool == TRUE) {

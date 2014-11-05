@@ -45,18 +45,19 @@ function sql_injection($content)
 	}
 	return $content;
 }
-
-
+Global $config;
+$config['templet'] = 'default';
+$config['server'] = '127.0.0.1';
+$config['user'] = 'root';
+$config['passwd'] = '';
+$config['DBNAME'] = 'edu-default';
+$config['PAGING'] = 10;
+$config['DEFAULT-PASSWD'] = '123456';
+$config['STATICCACHE'] = TRUE;
 
 function C($name)
 {
-	$config['templet'] = 'default';
-	$config['server'] = '127.0.0.1';
-	$config['user'] = 'root';
-	$config['passwd'] = '';
-	$config['DBNAME'] = 'edu-default';
-	$config['PAGING'] = 10;
-	$config['STATICCACHE'] = FALSE;
+	Global $config;
 	return $config[$name];
 }
 
@@ -69,26 +70,78 @@ function G($name)
 
 	switch ($name) {
 		case 'newlist':
-		return db::creat()->loopessay(1,8,'>=');
+		if (!isset($newlist)) {
+			$newlist = db::creat()->loopessay(1,8,'>=');
+		}
+		return $newlist;
 		case 'adminlist':
 		//全局文章总行数
 		Global $count;
-		return db::creat()->loopessay(1,10,'>=',$count);
+		Global $adminlist;
+		if (!isset($adminlist)) {
+			$adminlist = db::creat()->loopessay(1,C('PAGING'),'>=',$count);
+		}
+		return $adminlist;
 		case 'adminlistcount':
 		Global $count;
 		return $count;
 		case 'pagelist':
-		return db::creat()->loopessay();
+		Global $pagelist;
+		if (!isset($pagelist)) {
+			$pagelist = db::creat()->loopessay();
+		}
+		return $pagelist;
 		case 'newstype':
-		return db::creat()->loopclass();
+		Global $newstype;
+		if (!isset($newstype)) {
+			$newstype = db::creat()->loopclass();
+		}
+		return $newstype;
 		case 'nav':
-		return db::creat()->contentclass(1,'=');
+		Global $nav;
+		if (!isset($nav)) {
+			$nav = db::creat()->contentclass(1,'=');
+		}
+		return $nav;
+		case 'getvip':
+		Global $getvip;
+		if (!isset($getvip)) {
+			$getvip = db::creat()->getvipclass();
+		}
+		return $getvip;
 		case 'navlist':
-		return db::creat()->loopnav(1,'=');
+		Global $navlist;
+		if (!isset($navlist)) {
+			$navlist = db::creat()->loopnav(1,'=');
+		}
+		return $navlist;
 		case 'adminnav':
-		return db::creat()->loopnav();
+		Global $adminnav;
+		if (!isset($adminnav)) {
+			$adminnav = db::creat()->loopnav();
+		}
+		return $adminnav;
 		case 'admincontentclass':
-		return db::creat()->contentclass();
+		Global $admincontentclass;
+		if (!isset($admincontentclass)) {
+			$admincontentclass = db::creat()->contentclass();
+		}
+		return $admincontentclass;
+		case 'adminvip':
+		Global $vipcount;
+		if (isset($_REQUEST['vippage'])) {
+			$pagecount = (int)C('PAGING');
+			$page = (int)$_REQUEST['vippage'] * $pagecount - $pagecount;
+			$page = $page.','.$pagecount;
+		}
+		else {
+			$page = (int)C('PAGING');
+		}
+		$adminvip = db::creat()->getvips(1,$vipcount,$page);
+		return $adminvip;
+		case 'vipcount':
+		Global $vipcount;
+		return $vipcount;
 		default:
 		break;
 	}

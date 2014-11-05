@@ -11,15 +11,20 @@ include("config.php");
 if (count($_REQUEST) >= 1) {
 	if ($_REQUEST[key($_REQUEST)] == '') {
 		$parameter = explode('/',ltrim(key($_REQUEST),'\/'));
-		if (count($parameter) >= 1) {
-
+		$count = count($parameter);
+		if ($count >= 1) {
 			if ($parameter[0] != '') {
 				$_REQUEST['model'] = $parameter[0];
 			}
 		}
-		if (count($parameter) >= 2) {
+		if ($count >= 2) {
 			if ($parameter[1] != '') {
 				$_REQUEST['page'] = $parameter[1];
+			}
+			for ($n = 2; $n < $count; $n++) {
+				if (isset($parameter[$n + 1])) {
+					$_REQUEST[$parameter[$n]] = $parameter[$n + 1];
+				}
 			}
 		}
 
@@ -134,9 +139,9 @@ if (($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')) {
 	if (extension_loaded('zlib')) {
 		ob_start('ob_gzip');
 	}
-	$temp = TEMPDIR.'./edu_'.hash('md5',$file);
+	$temp        = TEMPDIR.'./edu_default_'.hash('md5',$file).'.tmp';
 	$STATICCACHE = C('STATICCACHE');
-	if ($STATICCACHE&&is_file($temp)) {
+	if ($STATICCACHE && is_file($temp)) {
 		$html_text = file_get_contents($temp);
 		if ($_SERVER['REQUEST_TIME'] - filectime($temp) > 5) {
 			$html_text = systems::compress_html($file);
@@ -149,9 +154,8 @@ if (($_REQUEST['type'] == '0' || $_REQUEST['type'] == '')) {
 		//读入并压缩HTML
 		$html_text = systems::compress_html($file);
 		M($html_text);//处理代码
-		if($STATICCACHE)
-		{
-			file_put_contents($temp,$html_text);	
+		if ($STATICCACHE) {
+			file_put_contents($temp,$html_text);
 		}
 	}
 	//输出处理后的HTML代码

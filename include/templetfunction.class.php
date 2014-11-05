@@ -115,16 +115,16 @@ class templetfunction
 	}
 	public function traversal( & $htmltext, & $ucode , & $arguments, & $func_in, & $func_ot)
 	{
-		self::select($htmltext,  $ucode ,  $arguments,  $func_in,  $func_ot,$modeltext);
+		self::select($htmltext, $ucode , $arguments,  $func_in,  $func_ot,$modeltext);
 		$temp   = '';
 		//替换循环变量$$
 		$arglen = count($arguments);
 		for ($ii = 0; $ii < $arglen; $ii++) {
 			$code = G($arguments[$ii]);
-			if(is_numeric($code)){
+			if (is_numeric($code)) {
 				$paging = C('PAGING');
-				$pagingS = $code / $paging;
-				if($code > $pagingS * $paging){
+				$pagingS= $code / $paging;
+				if ($code > $pagingS * $paging) {
 					++$pagingS;
 				}
 				for ($ss = 0; $ss < $pagingS; $ss++) {
@@ -211,18 +211,14 @@ class templetfunction
 			if ($htmltext[$in] == '{' && $htmltext[$in - 1] == '\\') {
 				$htmltext[$in - 1] = '  ';
 			}
-
 			if ($loop_in > 0 && $htmltext[$in] == '{' && $htmltext[$in - 1] != '\\') {
 				++$in_count;
 			}
-
 			if ($loop_in > 0 && $htmltext[$in] == '}' && $htmltext[$in - 1] != '\\') {
 				--$in_count;
 			}
-
 			//循环判断函数体结尾
 			if ($loop_in > 0 && $htmltext[$in] == '}' && $htmltext[$in - 1] != '\\' && $in_count == 0) {
-				//$model = substr($htmltext,$loop_in - 1 ,$in - $loop_in + 2);
 				$modeltext = substr($htmltext,$loop_in  ,$in - $loop_in );
 				$model     = '{'.$modeltext.'}' ;
 				break;
@@ -233,6 +229,7 @@ class templetfunction
 			}
 
 		}
+		
 		//删除模板部分
 		$htmltext = str_replace($model,'',$htmltext);
 	}

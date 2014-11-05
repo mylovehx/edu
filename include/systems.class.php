@@ -10,9 +10,9 @@ class systems
 	*/
 	public static function compress_html( & $file)
 	{
-		$temp        = TEMPDIR.'./'.hash('md5',$file).'.tmp';
+		$temp        = TEMPDIR.'./edu_'.hash('md5',$file).'.tmp';
 		$STATICCACHE = C('STATICCACHE');
-		if ($STATICCACHE && is_file($temp) && $_SERVER['REQUEST_TIME'] - filectime($temp) < 1800) {
+		if ($STATICCACHE && is_file($temp) && $_SERVER['REQUEST_TIME'] - filectime($temp) < 180) {
 			return file_get_contents($temp);
 		}
 		$string = file_get_contents($file);
